@@ -16,7 +16,7 @@ class App extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:5000/friends")
+      .get(`http://localhost:5000/friends`)
       .then(res => {
         this.setState({
           friends: res.data
@@ -41,13 +41,33 @@ class App extends Component {
       .post("http://localhost:5000/friends", this.state.newFriend)
       .then(res => this.setState({ friends: res.data }))
       .catch(err => console.log(err));
+
+    this.setState({
+      newFriend: {
+        name: "",
+        age: "",
+        email: ""
+      }
+    });
+  };
+
+  deleteFriend = id => {
+    this.state.friends.find(friend => {
+      if (friend.name === id) {
+        console.log(friend, id);
+        axios
+          .delete(`http://localhost:5000/friends/${friend.id}`)
+          .then(res => this.setState({ friends: res.data }))
+          .catch(err => console.log(err));
+      }
+    });
   };
 
   render() {
     return (
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {this.state.friends.map(friend => {
-          return <Friends friend={friend} />;
+          return <Friends friend={friend} deleteFriend={this.deleteFriend} />;
         })}
         <Form
           handleChange={this.handleChange}
