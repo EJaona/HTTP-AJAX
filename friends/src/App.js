@@ -63,11 +63,40 @@ class App extends Component {
     });
   };
 
+  updateFriend = id => {
+    this.state.friends.find(friend => {
+      if (friend.name === id) {
+        axios
+          .put(
+            `http://localhost:5000/friends/${friend.id}`,
+            this.state.newFriend
+          )
+          .then(res =>
+            this.setState({
+              friends: res.data,
+              newFriend: {
+                name: "",
+                age: "",
+                email: ""
+              }
+            })
+          )
+          .catch(err => console.log(err));
+      }
+    });
+  };
+
   render() {
     return (
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {this.state.friends.map(friend => {
-          return <Friends friend={friend} deleteFriend={this.deleteFriend} />;
+          return (
+            <Friends
+              updateFriend={this.updateFriend}
+              friend={friend}
+              deleteFriend={this.deleteFriend}
+            />
+          );
         })}
         <Form
           handleChange={this.handleChange}

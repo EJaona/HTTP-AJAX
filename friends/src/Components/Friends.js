@@ -15,7 +15,11 @@ const Friends = props => {
       <p style={{ cursor: "pointer", textDecoration: "underline" }}>
         {props.friend.email}
       </p>
-      <input type="button" value="Edit" />
+      <input
+        type="button"
+        value="Edit"
+        onClick={_ => props.updateFriend(props.friend.name)}
+      />
       <input
         type="button"
         value="Delete"
